@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+{% block body %}
+
+
+    <div class="row">
+        <div class="col-md-10 offset-md-3">
+            <div class="col-lg-10"> 
+                <h3>Makaleler</h3>
+                <hr>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10 offset-md-3">
+            <div class="col-lg-10"> 
+                <form>
+                 {% csrf_token %} 
+                <input type="text" name = "keyword" class="input-sm" maxlength="64" placeholder="Ara...">
+                <button type="submit" class="btn btn-danger">Ara</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% if articles %}
+        {% for article in articles  %}
+            <div class="row">
+                <div class="col-md-10 offset-md-3">
+                    <div class="col-lg-10"> 
+                        <a href="{% url 'article:detail' article.id %}"><h2  class="mt-4">{{article.title}}</h2></a>
+                        <p class="lead">
+                        <a href="#">{{article.author.username}} </a>
+                        tarafından yayınlandı.
+                        </p>
+                        <hr>
+                        <p>Tarih Bilgisi:{{article.created_date}} </p>
+                        <hr>
+                        {% if article.article_image %}
+                            <a href="{% url 'article:detail' article.id %}"><img class="img-fluid rounded" src="{{article.article_image.url}}" alt=""></a>
+                        {% endif %}
+                        <hr>
+                        <p class="lead">{{article.content|safe|truncatewords:15}}</p>
+                        <a style="float:right"; href="{% url 'article:detail' article.id %}" class="btn btn-danger"> Devamını oku.</a>
+                        <hr>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+    {% else %}
+    <div class="alert alert-danger">Makale bulunamadı.</div>
+    {% endif %}
+{% endblock body %}
